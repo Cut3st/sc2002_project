@@ -1,5 +1,7 @@
 package combat;
+import combatants.Combatant;
+import java.util.List;
 
-public class TurnOrderStrategy {
-    
+public interface TurnOrderStrategy {
+    List<Combatant> getTurnOrder(List<Combatant> combatants);
 }
