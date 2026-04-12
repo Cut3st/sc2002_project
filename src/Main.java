@@ -1,5 +1,5 @@
-import ui.CLI;
-import combat.GameController;
+import Boundary.CLI;
+import Control.GameController;
 
 public class Main {
     public static void main(String[] args) {
