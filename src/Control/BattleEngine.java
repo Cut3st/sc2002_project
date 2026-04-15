@@ -55,11 +55,18 @@ public class BattleEngine {
                 Map<Combatant, Boolean> enemyAliveBefore = snapshotEnemyAlive();
 
                 c.TakeTurn(context);
-                context.tickEffectsFor(c); // tick only this combatant's effects after their turn
+
+                // Player effects are ticked at end of round, so they remain active for enemy attacks
+                if (c != player) {
+                    context.tickEffectsFor(c);
+                }
 
                 playerDamageTaken += Math.max(0, playerHpBefore - player.getHp());
                 updateEnemyStats(enemyHpBefore, enemyAliveBefore);
             }
+
+            // tick player status effects once per round, after every combatant has acted
+            context.tickEffectsFor(player);
 
             checkBackupSpawn();
             displayRoundSummary();
