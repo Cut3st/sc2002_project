@@ -2,14 +2,14 @@ package Entity.Combatants;
 
 import Entity.Actions.ArcaneBlast;
 
-public class Wizard extends Player{
-    public Wizard(){
+public class Wizard extends Player {
+    public Wizard() {
         this.name = "Wizard";
-        this.hp=200;
+        this.hp = 200;
         this.maxHp = 200;
-        this.attack=50;
-        this.defense=10;
-        this.speed=20;
-        this.skill=new ArcaneBlast();
+        this.attack = 50;
+        this.defense = 10;
+        this.speed = 20;
+        this.skill = new ArcaneBlast();
     }
 }

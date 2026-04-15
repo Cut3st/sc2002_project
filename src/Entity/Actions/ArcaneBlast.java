@@ -1,8 +1,8 @@
-package Entity.Actionsbatants;
+package Entity.Actions;
 
-import Entity.Actions.skillCooldown;
 import Control.BattleInfo;
-import Entity.effects.ArcaneBuff;
+import Entity.Combatants.Combatant;
+import Entity.Effects.ArcaneBuff;
 
 public class ArcaneBlast extends skillCooldown {
     @Override
@@ -30,7 +30,7 @@ public class ArcaneBlast extends skillCooldown {
         if (kills > 0) {
             context.applyStatusEffect(user, new ArcaneBuff(kills));
         }
-        
+
         triggerCooldown();
     }
 }

@@ -1,11 +1,14 @@
 package Entity.EnemyActions;
+
 import Control.BattleInfo;
+import Entity.Combatants.Combatant;
 import Entity.Combatants.Enemy;
-public class BasicEnemyAttack implements EnemyAction{
+
+public class BasicEnemyAttack implements EnemyAction {
+    @Override
     public void execute(Enemy enemy, BattleInfo context) {
         Combatant player = context.getPlayer();
 
-        // Smoke bomb check — M4 will wire this in fully, stub it here
         if (context.isSmokeBombed(player)) {
             System.out.println(enemy.getName() + " attacks " + player.getName()
                     + " but the smoke bomb absorbs the hit! (0 damage)");

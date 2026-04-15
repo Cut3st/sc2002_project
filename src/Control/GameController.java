@@ -1,11 +1,19 @@
-// combat/GameController.java
 package Control;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import Boundary.CLI;
-import Entity.Combatants.*;
-import Entity.Items.*;
+import Entity.Combatants.Combatant;
+import Entity.Combatants.Goblin;
+import Entity.Combatants.Player;
+import Entity.Combatants.Warrior;
+import Entity.Combatants.Wizard;
+import Entity.Combatants.Wolf;
+import Entity.Items.Item;
+import Entity.Items.Potion;
+import Entity.Items.PowerStone;
+import Entity.Items.SmokeBomb;
 import Entity.Strategy.SpeedBasedTurnOrder;
 
 public class GameController {
@@ -21,17 +29,16 @@ public class GameController {
 
         while (playing) {
             int playerChoice = cli.showPlayerSelection();
-            int[] items = cli.showItemSelection();      // M4 will use these values
+            int[] items = cli.showItemSelection();
             int difficulty = cli.showDifficultySelection();
 
-            // Keep these so the loop re-runs correctly
             boolean playAgainSame = true;
             while (playAgainSame) {
                 Player player = playerChoice == 1 ? new Warrior() : new Wizard();
                 assignItems(player, items);
 
                 List<Combatant> enemies = buildEnemies(difficulty);
-                List<Combatant> backup  = buildBackup(difficulty);
+                List<Combatant> backup = buildBackup(difficulty);
 
                 BattleEngine engine = new BattleEngine(player, enemies, backup,
                         new SpeedBasedTurnOrder(), cli);
@@ -39,19 +46,20 @@ public class GameController {
 
                 int choice = cli.showPostGameMenu();
                 switch (choice) {
-                    case 1 -> { /* replay same — inner loop continues */ }
-                    case 2 -> { playAgainSame = false; /* breaks inner, outer re-runs setup */ }
-                    case 3 -> { playAgainSame = false; playing = false; }
+                    case 1 -> { }
+                    case 2 -> playAgainSame = false;
+                    case 3 -> {
+                        playAgainSame = false;
+                        playing = false;
+                    }
                 }
             }
         }
         cli.close();
     }
 
-    private void assignItems(Player player, int[] items)
-    {
-        for (int choice : items)
-        {
+    private void assignItems(Player player, int[] items) {
+        for (int choice : items) {
             player.addItem(createItem(choice));
         }
     }
@@ -61,11 +69,9 @@ public class GameController {
             case 1 -> new Potion();
             case 2 -> new PowerStone();
             case 3 -> new SmokeBomb();
-            case 4 -> new Antidote();
             default -> throw new IllegalArgumentException("Invalid item choice: " + choice);
         };
     }
-
 
     private List<Combatant> buildEnemies(int difficulty) {
         List<Combatant> enemies = new ArrayList<>();
@@ -77,13 +83,13 @@ public class GameController {
             }
             case 2 -> {
                 enemies.add(new Goblin("Goblin A"));
-                enemies.add(new Shaman("Shaman A"));
+                enemies.add(new Wolf("Wolf A"));
             }
             case 3 -> {
                 enemies.add(new Goblin("Goblin A"));
-                enemies.add(new Wolf("Wolf A"));
-                enemies.add(new Shaman("Shaman A"));
+                enemies.add(new Goblin("Goblin B"));
             }
+            default -> throw new IllegalArgumentException("Invalid difficulty: " + difficulty);
         }
         return enemies;
     }
@@ -93,11 +99,14 @@ public class GameController {
         switch (difficulty) {
             case 2 -> {
                 backup.add(new Wolf("Wolf A"));
-                backup.add(new Shaman("Shaman B"));
+                backup.add(new Wolf("Wolf B"));
             }
             case 3 -> {
                 backup.add(new Goblin("Goblin A"));
+                backup.add(new Wolf("Wolf A"));
                 backup.add(new Wolf("Wolf B"));
+            }
+            default -> {
             }
         }
         return backup;
