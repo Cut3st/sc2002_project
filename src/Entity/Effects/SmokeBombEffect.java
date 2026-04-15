@@ -9,7 +9,7 @@ import Entity.Combatants.Combatant;
 
 public class SmokeBombEffect extends StatusEffect {
     public SmokeBombEffect() {
-        super("SMOKE_BOMB", 3);
+        super("SMOKE_BOMB", 2);
     }//Define SmokeBombEffect Properties
 
     public void onApply(Combatant smokeUser) {
