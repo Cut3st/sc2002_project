@@ -12,7 +12,6 @@ public class ArcaneBlast extends skillCooldown {
             return;
         }
 
-        int kills = 0;
         System.out.println(user.getName() + " unleashes Arcane Blast on all enemies!");
 
         for (Combatant enemy : context.getEnemies()) {
@@ -24,11 +23,9 @@ public class ArcaneBlast extends skillCooldown {
 
             System.out.println("  " + enemy.getName() + " HP: " + oldHp + " -> " + enemy.getHp()
                     + " (dmg: " + damage + ")");
-            if (!enemy.isAlive()) kills++;
-        }
-
-        if (kills > 0) {
-            context.applyStatusEffect(user, new ArcaneBuff(kills));
+            if (!enemy.isAlive()){
+                context.applyStatusEffect(user, new ArcaneBuff(1));
+            }
         }
 
         triggerCooldown();

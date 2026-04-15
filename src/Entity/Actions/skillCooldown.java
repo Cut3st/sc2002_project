@@ -9,6 +9,7 @@ public abstract class skillCooldown implements SpecialSkill {
 
     protected boolean powerStoneMode = false;
     private boolean usedNormallyThisTurn = false;
+    private boolean usedPowerStoneThisTurn = false;
 
     @Override
     public boolean isAvailable() {
@@ -28,6 +29,13 @@ public abstract class skillCooldown implements SpecialSkill {
             usedNormallyThisTurn = false;
             return;
         }
+
+        if(usedPowerStoneThisTurn)
+        {
+            usedPowerStoneThisTurn = false;
+            return;
+        }
+
         if (cooldown > 0) cooldown--;
     }
 
@@ -44,6 +52,7 @@ public abstract class skillCooldown implements SpecialSkill {
     @Override
     public void executeFromPowerStone(Combatant user, BattleInfo context) {
         powerStoneMode = true;
+        usedPowerStoneThisTurn = true;
         execute(user, context);
         powerStoneMode = false;
     }
