@@ -8,6 +8,10 @@ public abstract class Enemy extends Combatant{
         return action;
     }
 
+    protected EnemyAction previewAction(BattleInfo context) {
+        return chooseAction(context);
+    }
+
     public void TakeTurn(BattleInfo context) {
         if (!isAlive()) return;
         if (context.isStunned(this)) {
@@ -15,5 +19,9 @@ public abstract class Enemy extends Combatant{
             return;
         }
         chooseAction(context).execute(this, context);
+    }
+
+    public String getIntent(BattleInfo context) {
+        return previewAction(context).getIntent(this, context);
     }
 }

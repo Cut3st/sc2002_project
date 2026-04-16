@@ -7,9 +7,11 @@ import Boundary.CLI;
 import Entity.Combatants.Combatant;
 import Entity.Combatants.Goblin;
 import Entity.Combatants.Player;
+import Entity.Combatants.Shaman;
 import Entity.Combatants.Warrior;
 import Entity.Combatants.Wizard;
 import Entity.Combatants.Wolf;
+import Entity.Items.Antidote;
 import Entity.Items.Item;
 import Entity.Items.Potion;
 import Entity.Items.PowerStone;
@@ -69,6 +71,7 @@ public class GameController {
             case 1 -> new Potion();
             case 2 -> new PowerStone();
             case 3 -> new SmokeBomb();
+            case 4 -> new Antidote();
             default -> throw new IllegalArgumentException("Invalid item choice: " + choice);
         };
     }
@@ -87,7 +90,7 @@ public class GameController {
             }
             case 3 -> {
                 enemies.add(new Goblin("Goblin A"));
-                enemies.add(new Goblin("Goblin B"));
+                enemies.add(new Shaman("Shaman"));
             }
             default -> throw new IllegalArgumentException("Invalid difficulty: " + difficulty);
         }
@@ -98,13 +101,12 @@ public class GameController {
         List<Combatant> backup = new ArrayList<>();
         switch (difficulty) {
             case 2 -> {
-                backup.add(new Wolf("Wolf A"));
                 backup.add(new Wolf("Wolf B"));
+                backup.add(new Wolf("Wolf C"));
             }
             case 3 -> {
-                backup.add(new Goblin("Goblin A"));
-                backup.add(new Wolf("Wolf A"));
-                backup.add(new Wolf("Wolf B"));
+                backup.add(new Goblin("Goblin B"));
+                backup.add(new Wolf("Wolf"));
             }
             default -> {
             }

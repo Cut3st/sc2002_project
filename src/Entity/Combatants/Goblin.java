@@ -1,8 +1,13 @@
 package Entity.Combatants;
 
+import Control.BattleInfo;
 import Entity.EnemyActions.BasicEnemyAttack;
+import Entity.EnemyActions.EnemyAction;
+import Entity.EnemyActions.EnemyDefendAction;
 
 public class Goblin extends Enemy {
+    private static final int DEFEND_THRESHOLD = 20;
+
     public Goblin(String name) {
         this.name = name;
         this.hp = 55;
@@ -15,5 +20,13 @@ public class Goblin extends Enemy {
 
     public Goblin() {
         this("Goblin");
+    }
+
+    @Override
+    protected EnemyAction chooseAction(BattleInfo context) {
+        if (getHp() <= DEFEND_THRESHOLD && !context.isDefending(this)) {
+            return new EnemyDefendAction();
+        }
+        return action;
     }
 }

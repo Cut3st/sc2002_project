@@ -81,10 +81,11 @@ public abstract class Player extends Combatant {
         StringBuilder sb = new StringBuilder();
         boolean first = true;
         for (Map.Entry<String, Integer> entry : usageTracker.entrySet()) {
+            if (entry.getValue() <= 0) continue;
             if (!first) sb.append(", ");
             sb.append(entry.getKey()).append(": ").append(entry.getValue());
             first = false;
         }
-        return sb.toString();
+        return first ? "No items used" : sb.toString();
     }
 }

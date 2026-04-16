@@ -1,8 +1,15 @@
 package Entity.Combatants;
 
+import Control.BattleInfo;
 import Entity.EnemyActions.BasicEnemyAttack;
+import Entity.EnemyActions.EnemyAction;
+import Entity.EnemyActions.SavageBite;
 
 public class Wolf extends Enemy {
+    private static final int SAVAGE_BITE_THRESHOLD = 100;
+    private static final int SAVAGE_BITE_COOLDOWN = 2;
+    private int savageBiteCooldown = 0;
+
     public Wolf(String name) {
         this.name = name;
         this.hp = 40;
@@ -15,5 +22,26 @@ public class Wolf extends Enemy {
 
     public Wolf() {
         this("Wolf");
+    }
+
+    @Override
+    protected EnemyAction chooseAction(BattleInfo context) {
+        if (savageBiteCooldown == 0 && context.getPlayer().getHp() <= SAVAGE_BITE_THRESHOLD) {
+            savageBiteCooldown = SAVAGE_BITE_COOLDOWN;
+            return new SavageBite();
+        }
+
+        if (savageBiteCooldown > 0) {
+            savageBiteCooldown--;
+        }
+        return action;
+    }
+
+    @Override
+    protected EnemyAction previewAction(BattleInfo context) {
+        if (savageBiteCooldown == 0 && context.getPlayer().getHp() <= SAVAGE_BITE_THRESHOLD) {
+            return new SavageBite();
+        }
+        return action;
     }
 }

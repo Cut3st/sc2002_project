@@ -113,9 +113,10 @@ public class CLI {
         System.out.println("  [1] POTION       - Restore 100 HP");
         System.out.println("  [2] POWER STONE  - Free use of Special Skill (no cooldown change)");
         System.out.println("  [3] SMOKE BOMB   - Enemy attacks deal 0 dmg this turn + next");
+        System.out.println("  [4] ANTIDOTE     - Remove Poison from the player");
         System.out.println();
-        int item1 = getIntInput("  Select item 1 (1-3): ", 1, 3);
-        int item2 = getIntInput("  Select item 2 (1-3): ", 1, 3);
+        int item1 = getIntInput("  Select item 1 (1-4): ", 1, 4);
+        int item2 = getIntInput("  Select item 2 (1-4): ", 1, 4);
         return new int[]{item1, item2};
     }
 
@@ -127,11 +128,12 @@ public class CLI {
         System.out.println("  ENEMY STATS:");
         System.out.println("  Goblin  ->  HP: 55  |  ATK: 35  |  DEF: 15  |  SPD: 25");
         System.out.println("  Wolf    ->  HP: 40  |  ATK: 45  |  DEF:  5  |  SPD: 35");
+        System.out.println("  Shaman  ->  HP: 45  |  ATK: 30  |  DEF: 10  |  SPD: 20");
         System.out.println();
         printDivider('-', 60);
         System.out.println("  [1] EASY    - 3 Goblins");
         System.out.println("  [2] MEDIUM  - 1 Goblin + 1 Wolf  |  Backup: 2 Wolves");
-        System.out.println("  [3] HARD    - 2 Goblins           |  Backup: 1 Goblin + 2 Wolves");
+        System.out.println("  [3] HARD    - 1 Goblin + 1 Shaman |  Backup: 1 Goblin + 1 Wolf");
         System.out.println();
         return getIntInput("  Enter choice (1-3): ", 1, 3);
     }
@@ -142,13 +144,19 @@ public class CLI {
         System.out.printf("  ROUND %d%n", round);
         printDivider('=', 60);
 
-        System.out.printf("  %-20s  HP: %3d / %3d%n",
-                player.getName(), player.getHp(), player.getMaxHp());
+        String playerStatuses = context.getStatusSummary(player);
+        System.out.printf("  %-20s  HP: %3d / %3d %s%n",
+                player.getName(), player.getHp(), player.getMaxHp(),
+                playerStatuses.isEmpty() ? "" : playerStatuses);
 
         for (Combatant e : enemies) {
             String status = e.isAlive() ? "" : "  [ELIMINATED]";
-            System.out.printf("  %-20s  HP: %3d / %3d%s%n",
-                    e.getName(), e.getHp(), e.getMaxHp(), status);
+            String effects = e.isAlive() ? context.getStatusSummary(e) : "";
+            System.out.printf("  %-20s  HP: %3d / %3d%s %s%n",
+                    e.getName(), e.getHp(), e.getMaxHp(), status, effects);
+            if (e instanceof Entity.Combatants.Enemy enemy && e.isAlive()) {
+                System.out.printf("    Intent: %s%n", enemy.getIntent(context));
+            }
         }
 
         if (player instanceof Player p) {
@@ -205,8 +213,12 @@ public class CLI {
         System.out.println("  Congratulations, you have defeated all your enemies.");
         System.out.println();
         System.out.println("  STATISTICS:");
-        System.out.printf("  Remaining HP  : %d%n", remainingHp);
-        System.out.printf("  Total Rounds  : %d%n", totalRounds);
+        System.out.printf("  Remaining HP     : %d%n", remainingHp);
+        System.out.printf("  Total Rounds     : %d%n", totalRounds);
+        System.out.printf("  Damage Dealt     : %d%n", damageDealt);
+        System.out.printf("  Damage Taken     : %d%n", damageTaken);
+        System.out.printf("  Enemies Defeated : %d%n", enemiesDefeated);
+        System.out.printf("  Items Used       : %s%n", itemUsage);
         System.out.println();
         printDivider('*', 60);
     }
@@ -223,6 +235,10 @@ public class CLI {
         System.out.println("  STATISTICS:");
         System.out.printf("  Enemies Remaining     : %d%n", enemiesRemaining);
         System.out.printf("  Total Rounds Survived : %d%n", totalRounds);
+        System.out.printf("  Damage Dealt          : %d%n", damageDealt);
+        System.out.printf("  Damage Taken          : %d%n", damageTaken);
+        System.out.printf("  Enemies Defeated      : %d%n", enemiesDefeated);
+        System.out.printf("  Items Used            : %s%n", itemUsage);
         System.out.println();
         printDivider('x', 60);
     }

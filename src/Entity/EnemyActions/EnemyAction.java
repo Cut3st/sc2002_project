@@ -3,6 +3,8 @@ import Control.BattleInfo;
 import Entity.Combatants.Enemy;
 public interface EnemyAction{
     void execute(Enemy enemy,BattleInfo context);
+
+    default String getIntent(Enemy enemy, BattleInfo context) {
+        return enemy.getName() + " prepares to attack.";
+    }
 }
-
-
