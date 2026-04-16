@@ -22,6 +22,15 @@ public abstract class Enemy extends Combatant{
     }
 
     public String getIntent(BattleInfo context) {
-        return previewAction(context).getIntent(this, context);
+        EnemyAction preview = previewAction(context);
+        if (preview == null) {
+            return getName() + " is preparing an action.";
+        }
+
+        String intent = preview.getIntent(this, context);
+        if (intent == null || intent.isBlank()) {
+            return getName() + " is preparing an action.";
+        }
+        return intent;
     }
 }
