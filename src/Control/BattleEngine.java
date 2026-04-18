@@ -49,7 +49,7 @@ public class BattleEngine implements BattleEventListener {
                 statusEffects,
                 this
             );
-            cli.showBattleStatus(player, enemies, roundCount, context);
+            cli.showBattleStatus(player, enemies, roundCount, context, mode);
 
             List<Combatant> allCombatants = getAllCombatants();
             List<Combatant> turnOrder = turnOrderStrategy.getTurnOrder(allCombatants);

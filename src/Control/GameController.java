@@ -1,22 +1,11 @@
 package Control;
 
+import Boundary.CLI;
+import Entity.Combatants.*;
+import Entity.Items.*;
+import Entity.Strategy.SpeedBasedTurnOrder;
 import java.util.ArrayList;
 import java.util.List;
-
-import Boundary.CLI;
-import Entity.Combatants.Combatant;
-import Entity.Combatants.Goblin;
-import Entity.Combatants.Player;
-import Entity.Combatants.Shaman;
-import Entity.Combatants.Warrior;
-import Entity.Combatants.Wizard;
-import Entity.Combatants.Wolf;
-import Entity.Items.Antidote;
-import Entity.Items.Item;
-import Entity.Items.Potion;
-import Entity.Items.PowerStone;
-import Entity.Items.SmokeBomb;
-import Entity.Strategy.SpeedBasedTurnOrder;
 
 public class GameController {
     private final CLI cli;

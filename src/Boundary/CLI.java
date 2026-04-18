@@ -158,7 +158,7 @@ public class CLI {
         return getIntInput("  Enter choice (1-3): ", 1, 3);
     }
 
-    public void showBattleStatus(Combatant player, List<Combatant> enemies, int round, BattleInfo context) {
+    public void showBattleStatus(Combatant player, List<Combatant> enemies, int round, BattleInfo context, int mode) {
         System.out.println();
         printDivider('=', 60);
         System.out.printf("  ROUND %d%n", round);
@@ -174,7 +174,7 @@ public class CLI {
             String effects = e.isAlive() ? context.getStatusSummary(e) : "";
             System.out.printf("  %-20s  HP: %3d / %3d%s %s%n",
                     e.getName(), e.getHp(), e.getMaxHp(), status, effects);
-            if (e instanceof Entity.Combatants.Enemy enemy && e.isAlive()) {
+            if (mode == 2 && e instanceof Entity.Combatants.Enemy enemy && e.isAlive()) {
                 System.out.printf("    Intent: %s%n", enemy.getIntent(context));
             }
         }
