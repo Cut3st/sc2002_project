@@ -1,11 +1,4 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by Fernflower decompiler)
-//
-
 package Entity.Effects;
-
-import java.io.PrintStream;
 
 import Entity.Combatants.Combatant;
 
@@ -17,12 +10,11 @@ public class ArcaneBuff extends StatusEffect {//Define ArcaneBuff Properties
         this.attackBonus = numDefeated * 10;//Each enemy defeated gets 10
     }
 
-    public void onApply(Combatant ArcaneBuffUser) {
-        ArcaneBuffUser.increaseAttack(this.attackBonus);
-        PrintStream printing = System.out;
-        printing.println(ArcaneBuffUser.getName() + " gains +" + this.attackBonus + " ATK from Arcane Buff!");
+    public void onApply(Combatant target) {
+        target.increaseAttack(this.attackBonus);
+        System.out.println(target.getName() + " gains +" + this.attackBonus + " ATK from Arcane Buff!");
     }
 
-    public void onExpire(Combatant var1) {
+    public void onExpire(Combatant target) {
     }
 }

@@ -1,17 +1,11 @@
 package Boundary;
 
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 import Control.BattleInfo;
-import Entity.Actions.Action;
-import Entity.Actions.BasicAttack;
-import Entity.Actions.Defend;
-import Entity.Actions.ItemAction;
-import Entity.Actions.SpecialSkillAction;
-import Entity.Combatants.Combatant;
-import Entity.Combatants.Player;
-import Entity.Items.Item;
+import Entity.Actions.*;
+import Entity.Combatants.*;
+import Entity.Items.*;
 
 public class CLI {
     private final Scanner scanner;

@@ -88,7 +88,7 @@ public class BattleEngine implements BattleEventListener {
             if (allInitialDead) {
                 enemies.addAll(backupSpawn);
                 backupSpawned = true;
-                cli.showBackupSpawn(backupSpawn); // already implemented in CLI
+                cli.showBackupSpawn(backupSpawn);
             }
         }
     }
@@ -116,8 +116,7 @@ public class BattleEngine implements BattleEventListener {
             System.out.println(e.getName() + " " + status);
         }
 
-        if (player instanceof Entity.Combatants.Player p)
-        {
+        if (player instanceof Entity.Combatants.Player p) {
             System.out.println("Items: " + p.getItemsSummary());
             System.out.println("Items used: " + p.getUsageSummary());
             System.out.println("Skill cooldown: " + p.getSkill().getCooldown());

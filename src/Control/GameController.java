@@ -4,8 +4,7 @@ import Boundary.CLI;
 import Entity.Combatants.*;
 import Entity.Items.*;
 import Entity.Strategy.SpeedBasedTurnOrder;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class GameController {
     private final CLI cli;
@@ -111,8 +110,7 @@ public class GameController {
                     backup.add(new Wolf("Wolf B"));
                 }
             }
-            default -> {
-            }
+            default -> { }
         }
         return backup;
     }
