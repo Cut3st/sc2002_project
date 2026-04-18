@@ -28,22 +28,23 @@ public class GameController {
     public void run() {
         cli.showTitleScreen();
         boolean playing = true;
+        int mode = cli.showModeSelection();
 
         while (playing) {
             int playerChoice = cli.showPlayerSelection();
-            int[] items = cli.showItemSelection();
-            int difficulty = cli.showDifficultySelection();
+            int[] items = cli.showItemSelection(mode);
+            int difficulty = cli.showDifficultySelection(mode);
 
             boolean playAgainSame = true;
             while (playAgainSame) {
                 Player player = playerChoice == 1 ? new Warrior() : new Wizard();
                 assignItems(player, items);
 
-                List<Combatant> enemies = buildEnemies(difficulty);
-                List<Combatant> backup = buildBackup(difficulty);
+                List<Combatant> enemies = buildEnemies(difficulty, mode);
+                List<Combatant> backup = buildBackup(difficulty, mode);
 
                 BattleEngine engine = new BattleEngine(player, enemies, backup,
-                        new SpeedBasedTurnOrder(), cli);
+                        new SpeedBasedTurnOrder(), cli, mode);
                 engine.runBattle();
 
                 int choice = cli.showPostGameMenu();
@@ -76,37 +77,50 @@ public class GameController {
         };
     }
 
-    private List<Combatant> buildEnemies(int difficulty) {
+    private List<Combatant> buildEnemies(int difficulty, int mode) {
+        boolean ext = (mode == 2);
         List<Combatant> enemies = new ArrayList<>();
         switch (difficulty) {
             case 1 -> {
-                enemies.add(new Goblin("Goblin A"));
-                enemies.add(new Goblin("Goblin B"));
-                enemies.add(new Goblin("Goblin C"));
+                enemies.add(new Goblin("Goblin A", ext));
+                enemies.add(new Goblin("Goblin B", ext));
+                enemies.add(new Goblin("Goblin C", ext));
             }
             case 2 -> {
-                enemies.add(new Goblin("Goblin A"));
-                enemies.add(new Wolf("Wolf A"));
+                enemies.add(new Goblin("Goblin A", ext));
+                enemies.add(new Wolf("Wolf A", ext));
             }
             case 3 -> {
-                enemies.add(new Goblin("Goblin A"));
-                enemies.add(new Shaman("Shaman"));
+                if (ext) {
+                    enemies.add(new Goblin("Goblin A", true));
+                    enemies.add(new Shaman("Shaman"));
+                } else {
+                    enemies.add(new Goblin("Goblin A"));
+                    enemies.add(new Goblin("Goblin B"));
+                }
             }
             default -> throw new IllegalArgumentException("Invalid difficulty: " + difficulty);
         }
         return enemies;
     }
 
-    private List<Combatant> buildBackup(int difficulty) {
+    private List<Combatant> buildBackup(int difficulty, int mode) {
+        boolean ext = (mode == 2);
         List<Combatant> backup = new ArrayList<>();
         switch (difficulty) {
             case 2 -> {
-                backup.add(new Wolf("Wolf B"));
-                backup.add(new Wolf("Wolf C"));
+                backup.add(new Wolf("Wolf B", ext));
+                backup.add(new Wolf("Wolf C", ext));
             }
             case 3 -> {
-                backup.add(new Goblin("Goblin B"));
-                backup.add(new Wolf("Wolf"));
+                if (ext) {
+                    backup.add(new Goblin("Goblin B", true));
+                    backup.add(new Wolf("Wolf", true));
+                } else {
+                    backup.add(new Goblin("Goblin C"));
+                    backup.add(new Wolf("Wolf A"));
+                    backup.add(new Wolf("Wolf B"));
+                }
             }
             default -> {
             }

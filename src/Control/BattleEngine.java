@@ -7,12 +7,13 @@ import Entity.Strategy.TurnOrderStrategy;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class BattleEngine {
+public class BattleEngine implements BattleEventListener {
     private final Combatant player;
     private final List<Combatant> enemies;
     private final List<Combatant> backupSpawn;
     private final TurnOrderStrategy turnOrderStrategy;
     private final CLI cli;
+    private final int mode;
 
     private boolean backupSpawned = false;
     private int roundCount = 0;
@@ -23,12 +24,18 @@ public class BattleEngine {
     // persist effects across rounds
     private final Map<Combatant, List<StatusEffect>> statusEffects = new HashMap<>();
 
-    public BattleEngine(Combatant player, List<Combatant> enemies, List<Combatant> backupSpawn, TurnOrderStrategy strategy, CLI cli) {
+    public BattleEngine(Combatant player, List<Combatant> enemies, List<Combatant> backupSpawn, TurnOrderStrategy strategy, CLI cli, int mode) {
         this.player = player;
         this.enemies = new ArrayList<>(enemies);
         this.backupSpawn = (backupSpawn != null) ? backupSpawn : new ArrayList<>();
         this.turnOrderStrategy = strategy;
         this.cli = cli;
+        this.mode = mode;
+    }
+
+    @Override
+    public void onPlayerDamageTaken(int amount) {
+        playerDamageTaken += amount;
     }
 
     public void runBattle() {
@@ -39,7 +46,8 @@ public class BattleEngine {
                 enemies.stream().filter(Combatant::isAlive).collect(Collectors.toList()),
                 roundCount,
                 cli,
-                statusEffects
+                statusEffects,
+                this
             );
             cli.showBattleStatus(player, enemies, roundCount, context);
 
@@ -120,11 +128,11 @@ public class BattleEngine {
         String itemUsage = player instanceof Entity.Combatants.Player p ? p.getUsageSummary() : "No items used";
         if (player.isAlive()) {
             cli.showVictoryScreen(player.getHp(), roundCount, playerDamageDealt, playerDamageTaken,
-                    enemiesDefeated, itemUsage); // use CLI screen
+                    enemiesDefeated, itemUsage, mode);
         } else {
             long remaining = enemies.stream().filter(Combatant::isAlive).count();
             cli.showDefeatScreen((int) remaining, roundCount, playerDamageDealt, playerDamageTaken,
-                    enemiesDefeated, itemUsage); // use CLI screen
+                    enemiesDefeated, itemUsage, mode);
         }
     }
 

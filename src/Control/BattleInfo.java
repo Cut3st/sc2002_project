@@ -13,13 +13,19 @@ public class BattleInfo {
     private final int currentRound;
     private final Map<Combatant, List<StatusEffect>> statusEffects;
     private final CLI cli;
+    private final BattleEventListener listener;
 
     public BattleInfo(Combatant player, List<Combatant> enemies, int currentRound, CLI cli, Map<Combatant, List<StatusEffect>> statusEffects) {
+        this(player, enemies, currentRound, cli, statusEffects, null);
+    }
+
+    public BattleInfo(Combatant player, List<Combatant> enemies, int currentRound, CLI cli, Map<Combatant, List<StatusEffect>> statusEffects, BattleEventListener listener) {
         this.player = player;
         this.enemies = enemies;
         this.currentRound = currentRound;
         this.statusEffects = statusEffects;
         this.cli = cli;
+        this.listener = listener;
     }
 
     public Combatant getPlayer() { return player; }
@@ -79,7 +85,13 @@ public class BattleInfo {
             StatusEffect e = it.next();
             if (e.getDuration() == -1) continue; // permanent
 
+            int hpBefore = c.getHp();
             e.onTick(c);
+            int damageTaken = Math.max(0, hpBefore - c.getHp());
+            if (damageTaken > 0 && listener != null && c == player) {
+                listener.onPlayerDamageTaken(damageTaken);
+            }
+
             e.tick();
             if (e.isExpired()) {
                 e.onExpire(c);

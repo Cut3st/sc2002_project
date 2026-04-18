@@ -9,8 +9,9 @@ public class Wolf extends Enemy {
     private static final int SAVAGE_BITE_THRESHOLD = 100;
     private static final int SAVAGE_BITE_COOLDOWN = 2;
     private int savageBiteCooldown = 0;
+    private final boolean extendedMode;
 
-    public Wolf(String name) {
+    public Wolf(String name, boolean extendedMode) {
         this.name = name;
         this.hp = 40;
         this.maxHp = 40;
@@ -18,15 +19,20 @@ public class Wolf extends Enemy {
         this.defense = 5;
         this.speed = 35;
         this.action = new BasicEnemyAttack();
+        this.extendedMode = extendedMode;
+    }
+
+    public Wolf(String name) {
+        this(name, false);
     }
 
     public Wolf() {
-        this("Wolf");
+        this("Wolf", false);
     }
 
     @Override
     protected EnemyAction chooseAction(BattleInfo context) {
-        if (savageBiteCooldown == 0 && context.getPlayer().getHp() <= SAVAGE_BITE_THRESHOLD) {
+        if (extendedMode && savageBiteCooldown == 0 && context.getPlayer().getHp() <= SAVAGE_BITE_THRESHOLD) {
             savageBiteCooldown = SAVAGE_BITE_COOLDOWN;
             return new SavageBite();
         }
@@ -39,7 +45,7 @@ public class Wolf extends Enemy {
 
     @Override
     protected EnemyAction previewAction(BattleInfo context) {
-        if (savageBiteCooldown == 0 && context.getPlayer().getHp() <= SAVAGE_BITE_THRESHOLD) {
+        if (extendedMode && savageBiteCooldown == 0 && context.getPlayer().getHp() <= SAVAGE_BITE_THRESHOLD) {
             return new SavageBite();
         }
         return action;
