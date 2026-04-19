@@ -78,6 +78,12 @@ public class BattleEngine implements BattleEventListener {
 
             checkBackupSpawn();
             displayRoundSummary();
+
+            // Tick skill cooldown after display so the end-of-round summary reflects
+            // the current cooldown before it decrements — matches the brief's expected output.
+            if (player instanceof Entity.Combatants.Player p) {
+                p.getSkill().tickCooldown();
+            }
         }
         displayResult();
     }
@@ -124,10 +130,11 @@ public class BattleEngine implements BattleEventListener {
     }
 
     private void displayResult() {
+        String remainingItems = player instanceof Entity.Combatants.Player p ? p.getItemsSummary() : "None";
         String itemUsage = player instanceof Entity.Combatants.Player p ? p.getUsageSummary() : "No items used";
         if (player.isAlive()) {
             cli.showVictoryScreen(player.getHp(), roundCount, playerDamageDealt, playerDamageTaken,
-                    enemiesDefeated, itemUsage, mode);
+                    enemiesDefeated, remainingItems, itemUsage, mode);
         } else {
             long remaining = enemies.stream().filter(Combatant::isAlive).count();
             cli.showDefeatScreen((int) remaining, roundCount, playerDamageDealt, playerDamageTaken,

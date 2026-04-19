@@ -17,9 +17,6 @@ public abstract class Player extends Combatant {
 
         Action action = context.getPlayerAction(this);
         action.execute(this, context);
-
-        // Avoid decrementing cooldown on the same turn skill was normally used.
-        skill.tickCooldown();
     }
 
     public SpecialSkill getSkill() {

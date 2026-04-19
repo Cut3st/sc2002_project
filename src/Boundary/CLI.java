@@ -218,7 +218,7 @@ public class CLI {
     }
 
     public void showVictoryScreen(int remainingHp, int totalRounds, int damageDealt, int damageTaken,
-                                  int enemiesDefeated, String itemUsage, int mode) {
+                                  int enemiesDefeated, String remainingItems, String itemUsage, int mode) {
         System.out.println();
         printDivider('*', 60);
         printCentered("VICTORY!", 60);
@@ -229,6 +229,7 @@ public class CLI {
         System.out.println("  STATISTICS:");
         System.out.printf("  Remaining HP     : %d%n", remainingHp);
         System.out.printf("  Total Rounds     : %d%n", totalRounds);
+        System.out.printf("  Items Remaining  : %s%n", remainingItems);
         if (mode == 2) {
             System.out.printf("  Damage Dealt     : %d%n", damageDealt);
             System.out.printf("  Damage Taken     : %d%n", damageTaken);

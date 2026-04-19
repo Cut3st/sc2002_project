@@ -8,8 +8,6 @@ public abstract class skillCooldown implements SpecialSkill {
     protected static final int MAX_COOLDOWN = 3;
 
     protected boolean powerStoneMode = false;
-    private boolean usedNormallyThisTurn = false;
-    private boolean usedPowerStoneThisTurn = false;
 
     @Override
     public boolean isAvailable() {
@@ -19,23 +17,11 @@ public abstract class skillCooldown implements SpecialSkill {
     protected void triggerCooldown() {
         if (!powerStoneMode) {
             cooldown = MAX_COOLDOWN;
-            usedNormallyThisTurn = true;
         }
     }
 
     @Override
     public void tickCooldown() {
-        if (usedNormallyThisTurn) {
-            usedNormallyThisTurn = false;
-            return;
-        }
-
-        if(usedPowerStoneThisTurn)
-        {
-            usedPowerStoneThisTurn = false;
-            return;
-        }
-
         if (cooldown > 0) cooldown--;
     }
 
@@ -52,7 +38,7 @@ public abstract class skillCooldown implements SpecialSkill {
     @Override
     public void executeFromPowerStone(Combatant user, BattleInfo context) {
         powerStoneMode = true;
-        usedPowerStoneThisTurn = true;
+        if (cooldown > 0) cooldown++; // pre-compensate for end-of-round tick so net cooldown change = 0
         execute(user, context);
         powerStoneMode = false;
     }
